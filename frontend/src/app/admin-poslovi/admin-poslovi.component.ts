@@ -1,0 +1,269 @@
+import { Component, OnInit, ElementRef, ViewChildren, QueryList, ChangeDetectorRef, HostListener} from '@angular/core';
+import { PosloviService } from '../poslovi.service';
+import { Posao } from '../models/posao';
+import { KorisnikService } from '../korisnik.service';
+import { ObjekatService } from '../objekat.service';
+import { Router } from '@angular/router';
+import { Objekat } from '../models/objekat';
+import { Korisnik } from '../models/korisnik';
+import { Prostorija } from '../models/prostorija';
+import { Vrata } from '../models/vrata';
+import { Zahtev } from '../models/zahtev';
+
+@Component({
+  selector: 'app-admin-poslovi',
+  templateUrl: './admin-poslovi.component.html',
+  styleUrls: ['./admin-poslovi.component.css']
+})
+export class AdminPosloviComponent implements OnInit {
+
+  constructor(private poslServ:PosloviService, private korisnikServis:KorisnikService, private objService:ObjekatService, private cdRef:ChangeDetectorRef, private router:Router) { }
+
+  @ViewChildren('skica_objekta') private canvasi: QueryList<ElementRef>;
+  
+  objekti : Object = {}
+
+  prozor_s:number=null;
+  prozor_v:number=null;
+  setovan=false;
+  
+  prostorije: Array<Prostorija[]>  =[]
+  vrata: Array<Vrata[]> = []
+  konteksti: CanvasRenderingContext2D[]=[];
+  poslovi:Posao[] = []
+  gotovo:boolean
+  zahtevi_za_otkazivanjem:object[] = []
+  zahtevi_za_otkazivanjem_detalji:object[] = []
+  br_obj:number = 0
+  ngOnInit(): void {
+    this.br_obj = 0
+    this.poslServ.dohvati_sve().subscribe((res:Posao[])=>{
+      this.poslovi = res
+      console.log(res)
+      if(this.poslovi.length==0){
+        this.gotovo=true
+        this.setovan=true;
+        return;
+        
+      }
+    
+      for(let i =0; i<this.poslovi.length; i++){
+        this.objService.dohvati_objekat(this.poslovi[i].objekat).subscribe((res:Objekat)=>{
+          if(res) {
+            
+            this.objekti[this.poslovi[i]._id] = res
+            this.br_obj++
+
+          }
+          this.poslServ.dohvati_zahtev_za_otkazivanjem(this.poslovi[i]._id).subscribe((res:Zahtev[])=>{
+            let prom = this.poslovi[i]._id
+            if(res.length) {
+              let obj1= {}
+              obj1[prom] = true
+              let obj2 = {}
+              obj2[prom] = res[0]
+              this.zahtevi_za_otkazivanjem.push(obj1)
+              this.zahtevi_za_otkazivanjem_detalji.push(obj2)
+              //console.log(this.zahtevi_za_otkazivanjem)
+            }
+            else this.zahtevi_za_otkazivanjem.push({prom:false})
+            //console.log(res)
+            if((this.poslovi.length-1)==i){
+              //console.log(this.zahtevi_za_otkazivanjem)
+              this.inicijalizuj()
+              //console.log("aleksa")
+              this.gotovo=true
+              this.setovan=true;
+             
+              setTimeout(()=>{
+                this.ngAfterViewInit()}, 0
+              )
+            }
+          })
+        })
+      }
+
+    })
+  }
+  zahtev(id, status){
+    const data={
+      _id:this.dohvati_detalje_zahteva(id)._id,
+      status:status
+    }
+    this.poslServ.azuriraj_zahtev_za_otkazivanjem(data).subscribe((res)=>{
+      if(res['message']=='ok'){
+        if(status=="Одобрен"){
+          const data={
+            _id:id
+          }
+          this.poslServ.obrisi(data).subscribe((res)=>{
+            console.log("sve ok")
+            window.location.reload()
+          })
+        }else{
+          window.location.reload()
+        }
+      }
+    })
+    
+  }
+  zahtev_za_otkazivanjem(id){
+    for(let n of this.zahtevi_za_otkazivanjem){
+      if(n[id]){
+        return true;
+      }
+    }
+    return false;
+  }
+  dohvati_detalje_zahteva(id){
+    //console.log("pozvan")
+    for(let n of this.zahtevi_za_otkazivanjem_detalji){
+      //console.log(n)
+      if(n[id]){
+        return n[id];
+      }
+    }
+    return null
+  }
+  listner_action(){
+    try{
+      this.cdRef.detectChanges();
+      
+    
+      this.prozor_s = window.innerWidth;
+      this.prozor_v = window.innerHeight;
+      this.konteksti = []
+      
+      for(let i=0; i<this.canvasi.length; i++){
+        //console.log(this.canvasi.get(i))
+        this.konteksti.push(this.canvasi.get(i).nativeElement.getContext('2d'))
+      }
+      this.iscrtaj()
+    }catch{
+
+    }
+
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.cdRef.detectChanges();
+    setTimeout(()=>{
+    
+    this.prozor_s = window.innerWidth;
+    this.prozor_v = window.innerHeight;
+    /*for(let i=0; i<this.canvasi.length; i++){
+  
+      this.canvasi.get(i).nativeElement.width = (this.prozor_s<769) ? 285 :((this.prozor_s<993) ? 400 : 600)
+      this.canvasi.get(i).nativeElement.height = (this.prozor_s<769) ? 178 :((this.prozor_s<993) ? 250 : 350)
+      //this.objekti[i].sirina_kanvasa = (this.prozor_s<429) ? 285 :((this.prozor_s<717) ? 400 : 600)
+    }
+    //this.skaliranje()
+    this.iscrtaj()
+    for(let i=0; i<this.canvasi.length; i++){
+      this.objekti[i].sirina_kanvasa = (this.prozor_s<769) ? 285 :((this.prozor_s<993) ? 400 : 600)
+    }*/
+  },1)}
+  inicijalizuj(){
+    for(let i=0; i<this.br_obj; i++){
+      this.prostorije.push(this.objekti[this.poslovi[i]._id][0].prostorije)
+      let temp:Vrata[] = []
+      for(let j=0; j<this.objekti[this.poslovi[i]._id][0].prostorije.length; j++){
+        for(let k=0; k<this.objekti[this.poslovi[i]._id][0].prostorije[j].vrata.length; k++)
+        temp.push(this.objekti[this.poslovi[i]._id][0].prostorije[j].vrata[k])
+      }
+      this.vrata.push(temp)
+    }
+  
+  }
+  ngAfterViewInit(){
+  
+    
+    if(this.setovan){
+
+      //console.log(this.canvasi.length)
+      for(let i=0; i<this.canvasi.length; i++){
+        //console.log(this.canvasi.get(i))
+        this.konteksti.push(this.canvasi.get(i).nativeElement.getContext('2d'))
+      }
+
+      //this.skaliranje()
+      this.iscrtaj()
+    }
+    
+    //while(!this.setovan) {}
+    
+  }
+  
+  iscrtaj(){
+    //console.log("pozvan uz br obj "+this.objekti.length)
+    for(let i=0; i<this.br_obj; i++){
+      //console.log("imamo nesto 1")
+      this.konteksti[i].clearRect(0,0,this.canvasi.get(i).nativeElement.width, this.canvasi.get(i).nativeElement.height)
+      let j=0;
+          for(let m=0; m<this.prostorije[i].length;m++){
+            //console.log("imamo nesto 2")
+           let p = this.prostorije[i][m];
+            if(p['postavljeno']){
+              //console.log("imamo nesto 3")
+              this.konteksti[i].fillStyle = String(p.boja_popuna);
+              this.konteksti[i].strokeStyle = String(p.boja_okvir);
+              this.konteksti[i].fillRect(p['pozicija_x'],p['pozicija_y'],p['sirina'],p['visina'])
+              this.konteksti[i].strokeRect(p['pozicija_x'],p['pozicija_y'],p['sirina'],p['visina'])
+              this.konteksti[i].font="20px Georgia";
+              this.konteksti[i].textAlign="center"; 
+              this.konteksti[i].textBaseline = "middle";
+              this.konteksti[i].fillStyle = "#000000";
+              this.konteksti[i].fillText((j+1)+"",p['pozicija_x']+(p['sirina']/2),p['pozicija_y']+(p['visina']/2));
+            }else{
+            }
+            j++;
+          }
+          for(let k=0; k<this.vrata[i].length; k++){
+         
+                this.iscrtaj_svg(i, k)
+           
+          }
+    }
+  }
+  iscrtaj_svg(j, i){
+    //console.log("j je "+j+" a i je "+i)
+    let old_s = this.objekti[this.poslovi[j]._id].sirina_kanvasa
+    this.konteksti[j].save()
+    this.konteksti[j].fillStyle=this.vrata[j][i].boja
+              this.konteksti[j].beginPath()
+              let p = new Path2D("M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z");
+              this.konteksti[j].translate(this.vrata[j][i].pozicija_x+(this.vrata[j][i].strana == 1 || this.vrata[j][i].strana==4 ? 16 : ( this.vrata[j][i].strana == 3 ? -16 : 0)),this.vrata[j][i].pozicija_y-(this.vrata[j][i].strana == 3 || this.vrata[j][i].strana == 4? -16 : 16))
+              let ugao = 0;
+              switch(this.vrata[j][i].strana){
+                case 1:
+                  ugao = 90 * Math.PI / 180 
+                  break;
+                case 2:
+                  ugao = 0
+                  break;
+                case 3:
+                  ugao = -90 * Math.PI / 180 
+                  break;
+                case 4:
+                  ugao = 180 * Math.PI / 180 
+                  break;
+              }
+              this.konteksti[j].rotate(ugao)
+              
+              this.konteksti[j].fill(p);
+              /*if(old_s==600 && this.canvasi.get(j).nativeElement.width == 400 || old_s==400 && this.canvasi.get(j).nativeElement.width==285){
+                console.log("skalirano")
+                this.konteksti[j].scale(0.6667,0.7142)
+              }else if(old_s==600 && this.canvasi.get(j).nativeElement.width ==285){
+                this.konteksti[j].scale(0.6667*0.6667,0.7142*0.7142)
+              }else if(old_s==400 && this.canvasi.get(j).nativeElement.width == 600 || old_s==285 && this.canvasi.get(j).nativeElement.width==400){
+                this.konteksti[j].scale(1.5,1.4)
+              }else{
+                this.konteksti[j].scale(2.2497,1.96)
+              }*/
+              
+           
+              this.konteksti[j].closePath()
+              this.konteksti[j].restore()
+  }
+}

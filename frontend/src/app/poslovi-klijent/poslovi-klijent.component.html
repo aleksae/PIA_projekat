@@ -1,0 +1,213 @@
+<div class="accordion" id="pregled_poslova" *ngIf="gotovo">
+  <h3>Преглед послова</h3>
+  <div class="mb-2" *ngIf="poslovi_original.length!=0">
+    Филтери: <span class="badge rounded bg-white text-dark me-2"><svg (click)="filtriraj_aktivni()" *ngIf="!aktivni_filter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+      <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+    </svg> <svg (click)="filtriraj_aktivni()" *ngIf="aktivni_filter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill text-success" viewBox="0 0 16 16">
+      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+    </svg>Активни послови <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-briefcase-fill text-warning" viewBox="0 0 16 16">
+      <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5z"/>
+      <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.129 8.947a.5.5 0 0 1-.258 0L0 6.85v5.65z"/>
+    </svg></span>
+    <span class="badge rounded bg-white text-dark me-2"><svg (click)="filtriraj_zavrseni()" *ngIf="!zavrseni_filter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+      <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+    </svg> <svg (click)="filtriraj_zavrseni()" *ngIf="zavrseni_filter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill text-success" viewBox="0 0 16 16">
+      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+    </svg>Завршени послови  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check-fill text-secondary" viewBox="0 0 16 16">
+      <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
+      <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585c.055.156.085.325.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5c0-.175.03-.344.085-.5Zm6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+    </svg></span>
+    <span class="badge rounded bg-white text-dark"><svg (click)="filtriraj_zahtevi()" *ngIf="!zahtevi_filter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+      <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+    </svg> <svg (click)="filtriraj_zahtevi()" *ngIf="zahtevi_filter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill text-success" viewBox="0 0 16 16">
+      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+    </svg>Захтеви за послове <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2 text-info bi bi-envelope-check-fill" viewBox="0 0 16 16">
+      <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 4.697v4.974A4.491 4.491 0 0 0 12.5 8a4.49 4.49 0 0 0-1.965.45l-.338-.207L16 4.697Z"/>
+      <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z"/>
+    </svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2 bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+    </svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin text-warning" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
+      <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>
+      <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
+      <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
+    </svg>
+  </span>
+  </div>
+    <div class="accordion-item" *ngFor="let p of poslovi; index as i">
+      <div >
+          <h2 class="accordion-header">
+            <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#posao'+i" aria-expanded="false" aria-controls="#objekat">
+             
+                <div  class="me-2">
+                    <span *ngIf="p.status=='Послат захтев'" data-bs-toggle="tooltip" data-bs-placement="top" title="Захтев послат">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-info bi bi-envelope-check-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 4.697v4.974A4.491 4.491 0 0 0 12.5 8a4.49 4.49 0 0 0-1.965.45l-.338-.207L16 4.697Z"/>
+                            <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z"/>
+                          </svg>
+                    </span>
+                    <span *ngIf="p.status=='Одбијен'" data-bs-toggle="tooltip" data-bs-placement="top" title="Одбијен">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-danger bi bi-x-octagon-fill" viewBox="0 0 16 16">
+                            <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                          </svg>
+                    </span>
+                    <span *ngIf="p.status=='Готов'" data-bs-toggle="tooltip" data-bs-placement="top" title="Готов">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                          </svg>
+                    </span>
+                    <span *ngIf="p.status=='Активан'" data-bs-toggle="tooltip" data-bs-placement="top" title="Активан">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-briefcase-fill text-warning" viewBox="0 0 16 16">
+                        <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.129 8.947a.5.5 0 0 1-.258 0L0 6.85v5.65z"/>
+                      </svg>
+                    </span>
+                    <span *ngIf="p.status=='Понуда послата'" data-bs-toggle="tooltip" data-bs-placement="top" title="Понуда послата">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin text-warning" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
+                        <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>
+                        <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
+                        <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
+                      </svg>
+                      </span>
+                    <span *ngIf="p.status=='Завршен'" data-bs-toggle="tooltip" data-bs-placement="top" title="Завршен">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check-fill text-secondary" viewBox="0 0 16 16">
+                            <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
+                            <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585c.055.156.085.325.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5c0-.175.03-.344.085-.5Zm6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+                          </svg>
+                        </span>
+                </div>
+              <div>
+                Посао {{i+1}} 
+             </div>
+             
+            </div>
+          </h2>
+          <div id="posao{{i}}" class="accordion-collapse collapse" data-bs-parent="#pregled_poslova">
+            <div class="accordion-body row">
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                    <p><strong>Агенција: </strong>{{p.agencija_ime}}</p>
+                    <p><strong>Почетак: </strong>{{p.pocetak | date:'dd.MM.YYYY.'}}</p>
+                    <p><strong>Крај: </strong>{{p.kraj | date:'dd.MM.YYYY.'}}</p>
+                    <p><strong>Статус: </strong>{{p.status}}</p>
+                  </div>
+                  <div class="col" *ngIf="p.status=='Понуда послата' || p.status=='Активан'">
+                    <strong>{{p.status=='Активан' ?'Цена': 'Понуда:'}}</strong> {{p.ponuda}} дин.
+                    <div class="row" *ngIf="p.status=='Понуда послата'">
+                      <div class="col"><button class="btn btn-success"  (click)="prihvati(p)">Прихвати</button></div>
+                      <div class="col"><button class="btn btn-danger" (click)="odbij(p)">Одбиј</button></div>
+                    </div>
+                    <div class="row" *ngIf="sve_zelene_check(p._id)">
+                      <div class="col"><button class="btn btn-success"  (click)="plati(p)">Плати</button></div>
+                    </div>
+                  </div>
+                  </div>
+                  <hr >
+                  <div class="row" *ngIf="p.status=='Завршен' ">
+
+                    <h4 class="text-danger">Остави коментар </h4>
+                    <div class="form-floating mb-4">
+                      <input type="number" class="form-control" min="1" max="5" name="naziv" id="ocena" value="" placeholder="Унесите име" [(ngModel)]="ocene[p._id]" required>
+                      <label for="ocena">Оцена (1-5)</label>
+                    </div>
+                    <div class="mb-2">
+                      <label for="exampleFormControlTextarea1" class="form-label">Коментар</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" [(ngModel)]="komentari_uneti[p._id]"></textarea>
+                    </div>
+                    
+                    <div><button class="btn btn-primary" (click)="posalji_komentar(p)">{{komentari[p._id] ? 'Ажурирај':'Пошаљи'}} коментар</button>
+                      <button class="btn btn-danger" (click)="obrisi_komentar(p)" *ngIf="komentari[p._id]">Обриши коментар</button></div>
+                  </div>
+                  <div class="row" *ngIf="p.status=='Активан' && !zahtev_za_otkazivanjem(p._id) && !sve_zelene_check(p._id)" >
+                    <h4 class="text-danger">Захтев за отказивање</h4>
+                    <div class="mb-2">
+                      <label for="exampleFormControlTextarea1" class="form-label">Разлог за отказивање</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" [(ngModel)]="razlog"></textarea>
+                    </div>
+                    <div class="w-auto">
+                    <button class="btn btn-danger btn-sm" (click)="otkazi(p._id)">Пошаљи захтев</button></div>
+                  </div>
+                  <div class="row" *ngIf="p.status!='Завршен' && zahtev_za_otkazivanjem(p._id) " >
+                    <h4 class="text-danger">Захтев за отказивање већ послат</h4>
+                    <p><strong>Разлог: </strong>{{(dohvati_detalje_zahteva(p._id))['razlog']}}</p>
+                    <p><strong>Статус: </strong>{{(dohvati_detalje_zahteva(p._id))['status']}}</p>
+                    
+                  </div>
+                  <!--
+                  <div class="row" *ngIf="p.status=='Понуда послата'">
+                    <h4 class="text-warning">Плаћање <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
+                      <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                    </svg></h4>
+                    <div class="row">
+                      <div class="col-3">
+                      <div class="form-check ">
+                        <input class="form-check-input " type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <label class="form-check-label" for="inlineRadio1"><img src="./../assets/images/mastercard.png" style="width: 4em"></label>
+                      </div>
+                      <div class="form-check ">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <label class="form-check-label" for="inlineRadio1"><img src="./../assets/images/visa.png" style="width: 4em"></label>
+                      </div>
+                      <div class="form-check mt-4">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <label class="form-check-label" for="inlineRadio1"><img src="./../assets/images/maestro.png" style="width: 4em"></label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="row">
+                       
+                      
+                      Број картице:
+                      <input type="text" class="form-control {{!kreditna_err() ? 'border-danger' : 'border-success'}}" (input)="kreditna_input()" [(ngModel)]="br_kred_kartice">
+                      </div>
+                      <div class="row" style="margin-left: -1.5em;">
+                        <div class="col">
+                          Датум
+                          <input type="text" class="form-control">
+                        </div>
+                        <div class="col">
+                          CVV
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col d-flex flex-row-reverse">
+                        <button class="btn btn-primary">Плати</button>
+                      </div>
+                    </div>
+                    
+                </div> -->
+                </div>
+                <div class="col-6" style="overflow: auto;">
+                    <canvas #skica_objekta class="" style=" background: white;" style="border: 1px solid black;" 
+                    width="600" height="350"></canvas>
+                  </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="" *ngIf="poslovi.length==0">
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+      </svg>
+      
+      <div class="alert alert-primary d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <div>
+          Не постоје послови.
+        </div>
+      </div>
+    </div>
+</div>
+<div class="container d-flex align-items-center justify-content-center"  *ngIf="!gotovo">
+<app-loader></app-loader>
+</div>

@@ -1,0 +1,25 @@
+<h4>Корисници</h4>
+<div class="table-responsive">
+    <table class="table table-light table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Корисничко име</th>
+                <th>Мејл</th>
+                <th>Тип</th>
+                <th>Акција</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let k of korisnici">
+                <td>{{k.korisnicko_ime}}</td>
+                <td>{{k.imejl}}</td>
+                <td>{{k.uloga}}</td>
+                <td><a class="link-info me-2 l" routerLink="{{'/admin/korisnik/agencija/'+k.korisnicko_ime}}" *ngIf="k.uloga=='agencija'">Прегледај</a>
+                    <a class="link-warning me-2 l" routerLink="{{'/admin/korisnik/agencija/'+k.korisnicko_ime+'/radnici'}}" *ngIf="k.uloga=='agencija'">Радници</a>
+                    <a class="link-info me-2 l" routerLink="{{'/admin/korisnik/klijent/'+k.korisnicko_ime}}" *ngIf="k.uloga=='klijent'">Прегледај</a>
+                    <a class="link-danger l" (click)="obrisi(k)">Обриши</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

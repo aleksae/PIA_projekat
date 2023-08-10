@@ -1,0 +1,107 @@
+<header class="pb-3 mb-4 border-bottom">
+    <nav class="navbar navbar-expand-lg ">
+      <div class="container-fluid">
+        <a routerLink="{{ulogovan ? (ulogovan.uloga=='klijent' ? 'klijent/profil' : 'agencija/profil') : ''}}" class="d-flex align-items-center text-dark text-decoration-none navbar-brand">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" fill="currentColor" class="bi bi-houses-fill me-2" viewBox="0 0 16 16">
+              <path d="M7.207 1a1 1 0 0 0-1.414 0L.146 6.646a.5.5 0 0 0 .708.708L1 7.207V12.5A1.5 1.5 0 0 0 2.5 14h.55a2.51 2.51 0 0 1-.05-.5V9.415a1.5 1.5 0 0 1-.56-2.475l5.353-5.354L7.207 1Z"/>
+              <path d="M8.793 2a1 1 0 0 1 1.414 0L12 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l1.854 1.853a.5.5 0 0 1-.708.708L15 8.207V13.5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 4 13.5V8.207l-.146.147a.5.5 0 1 1-.708-.708L8.793 2Z"/>
+            </svg>
+         
+        <span class="fs-4">Реновирајмо заједно</span>
+      </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+            <li class="nav-item" *ngIf="ulogovan && ulogovan.uloga=='klijent'">
+              <a class="nav-link {{aktivan==1 ? 'active' : ''}}" routerLink="klijent/profil">Профил</a>
+            </li>
+            <li class="nav-item dropdown "  *ngIf="ulogovan && ulogovan.uloga=='klijent'">
+              <a class="nav-link dropdown-toggle {{aktivan==2 ? 'active' : ''}}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Објекти
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
+                <li><a class="dropdown-item" routerLink="klijent/objekti/pregled">Преглед</a></li>
+                <li><a class="dropdown-item" routerLink="klijent/objekti/kreiranje">Креирање</a></li>
+                <li><a class="dropdown-item" routerLink="klijent/objekti/json">Додавање - JSON</a></li>
+               
+              </ul>
+            </li>
+           
+             <li class="nav-item" *ngIf="ulogovan && ulogovan.uloga=='klijent'">
+              <a class="nav-link {{aktivan==3 ? 'active' : ''}}" routerLink="/pregled_agencija">Агенције</a>
+            </li>
+            <li class="nav-item" *ngIf="ulogovan && ulogovan.uloga=='klijent'">
+              <a class="nav-link {{aktivan==4 ? 'active' : ''}}" routerLink="klijent/poslovi/pregled">Послови</a>
+            </li>
+
+            <!--agencija-->
+            <li class="nav-item" *ngIf="ulogovan && ulogovan.uloga=='agencija'">
+              <a class="nav-link {{aktivan==1 ? 'active' : ''}}" routerLink="/agencija/profil">Профил</a>
+            </li>
+            <li class="nav-item" *ngIf="ulogovan && ulogovan.uloga=='agencija'">
+              <a class="nav-link {{aktivan==2 ? 'active' : ''}}" routerLink="/agencija/radnici">Радници</a>
+            </li>
+            <li class="nav-item" *ngIf="ulogovan && ulogovan.uloga=='agencija'">
+              <a class="nav-link {{aktivan==4 ? 'active' : ''}}" routerLink="/agencija/poslovi/pregled">Послови</a>
+            </li>
+           
+            <li class="nav-item" *ngIf="ulogovan">
+              <a class="nav-link" routerLink="/promena_lozinke">Промена лозинке</a>
+            </li>
+          
+            <!--admin-->
+            <li class="nav-item" *ngIf="admin">
+              <a class="nav-link " routerLink="/admin/pocetna">Почетна</a>
+            </li>
+            <li class="nav-item" *ngIf="admin">
+              <a class="nav-link " routerLink="/admin/korisnici">Корисници</a>
+            </li>
+            <li class="nav-item" *ngIf="admin">
+              <a class="nav-link " routerLink="/admin/korisnik/registruj_agenciju">Додај агенцију</a>
+            </li>
+            <li class="nav-item" *ngIf="admin">
+              <a class="nav-link " routerLink="/admin/korisnik/registruj_klijenta">Додај клијента</a>
+            </li>
+            <li class="nav-item" *ngIf="admin">
+              <a class="nav-link " routerLink="/admin/pregled_poslova">Послови</a>
+            </li>
+          </ul>
+          <div class="d-flex" >
+            <a class="btn btn-outline-light" routerLink="prijava" *ngIf="!ulogovan && !admin">Пријава</a>
+            <div *ngIf="ulogovan && !admin">
+                <img src="http://localhost:4000/prikaz_slike/podrazumevano_klijent.jpeg" class="rounded-circle border border-dark profilna me-2" *ngIf="ulogovan.uloga=='klijent' && ulogovan.profilna_slika==''">
+                <img src="http://localhost:4000/prikaz_slike/podrazumevano_agencija.png" class="rounded-circle border border-dark profilna me-2" *ngIf="ulogovan.uloga=='agencija' && ulogovan.profilna_slika==''">
+                <img src="http://localhost:4000/prikaz_slike/{{ulogovan.profilna_slika}}" class="rounded-circle border border-dark profilna me-2" *ngIf="ulogovan.profilna_slika!=''">
+                <span id="k_ime_header"><strong><a linkRouter="">{{ulogovan.korisnicko_ime}}</a></strong></span>
+                <button type="button" class="btn btn-danger btn-sm ms-3" (click)="odjava()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"></path>
+      <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"></path>
+    </svg>
+                    Одјава
+                  </button>
+                
+            </div>
+            <div *ngIf="admin">
+              <strong>Администратор</strong>
+              <button type="button" class="btn btn-danger btn-sm ms-3" (click)="odjava()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"></path>
+                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"></path>
+              </svg>
+                              Одјава
+                            </button>
+            </div>
+            
+           
+        </div>
+        </div>
+      </div>
+    </nav>
+    
+    <section>
+
+</section>
+  </header>

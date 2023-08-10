@@ -1,0 +1,151 @@
+<h4>Преглед захтева за сарадњом</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-light">
+        <thead>
+            <tr>
+                <th>Клијент</th>
+                <th>Почетак</th>
+                <th>Крај</th>
+                <th>Акција</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of poslovi_zahtev; let i = index">
+                <td>{{p.klijent}}</td>
+                <td>{{p.pocetak | date:'dd.MM.yyyy'}}</td>
+                <td>{{p.kraj | date:'dd.MM.yyyy'}}</td>
+                <td><a  class="link-primary" data-bs-toggle="modal" data-bs-target="#pregledaj_posao" (click)="pregled(i)">Прегледај захтев</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h4>Активни послови</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-light">
+        <thead>
+            <tr>
+                <th>Клијент</th>
+                <th>Почетак</th>
+                <th>Крај</th>
+                <th>Акција</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of poslovi_aktivni; let i = index">
+                <td>{{p.klijent}}</td>
+                <td>{{p.pocetak | date:'dd.MM.yyyy'}}</td>
+                <td>{{p.kraj | date:'dd.MM.yyyy'}}</td>
+                <td><a  class="link-primary" data-bs-toggle="modal" data-bs-target="#pregledaj_posao" (click)="pregled_akt(i)">Уреди</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal modal-xl fade" id="pregledaj_posao" tabindex="-1" aria-labelledby="pregledaj_posao" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Преглед посла</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="otkazi_unos($event)"></button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-{{greska ? 'danger' : 'primary'}} d-flex align-items-center" role="alert" *ngIf="greska || uspeh">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <div>
+                {{greska ? greska : uspeh}} 
+                </div>
+            </div>
+            <div class="row">
+            <div class="col" style="overflow: auto;">
+                <canvas #skica_objekta class="" style=" background: white;" style="border: 1px solid black;" 
+                width="600" height="350" (click)="selektuj($event)"></canvas>
+              </div>
+              <div class="col-3" *ngIf="tekuci_objekat && !pregledaj_posao" >
+                <h5 *ngIf="selektovana_prostorija>-1 && broj_slobodnih_radnika>=tekuci_objekat.broj_prostorija">Избор радника за просторију {{selektovana_prostorija+1}}</h5>
+                <select class="form-control" multiple [(ngModel)]="odabrani" (change)="izbor_radnika()" *ngIf="selektovana_prostorija>-1 && broj_slobodnih_radnika>=tekuci_objekat.broj_prostorija">
+                    <option *ngFor="let r of radnici" value="{{r._id}}" [selected]="proveri_da_li_je_odabran(r._id)" [disabled]="proveri_da_li_je_odabran_uopsteno(r._id)">{{r.ime}} {{r.prezime}} [{{r.specijalizacija}}]</option>
+                </select>
+                <h5 class="text-danger" *ngIf="broj_slobodnih_radnika<tekuci_objekat.broj_prostorija && ima_neka_zuta">Немате довољно радника!</h5>
+                  <h5 class="text-success" *ngIf="ima_neka_crvena">Притисните на просторију како бисте завшрили радове на њој и ослободили раднике. Акција се спроводи након клика на дугме сачувај!</h5>
+                </div>
+                <div class="col" *ngIf="tekuci_objekat && pregledaj_posao">
+                  <strong>Тип: </strong> {{tekuci_objekat.tip}}<br/>
+                  <strong>Адреса: </strong> {{tekuci_objekat.adresa}}<br/>
+                  <strong>Квадратура: </strong> {{tekuci_objekat.kvadratura}}<br/>
+                  <strong>Бр. просторија: </strong> {{tekuci_objekat.broj_prostorija}}
+                  <hr>
+                  <h6>Попунити у случају прихватања:</h6>
+                  <div class="form-floating mb-4">
+                      <input type="text" class="form-control" name="ponuda" id="ponuda" placeholder="Унесите понуду" [(ngModel)]="ponuda" required>
+                      <label for="ponuda">Понуда (у динарима)</label>
+                  </div>
+                </div>
+            </div>
+          
+          
+        
+         
+       
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #gasenje (click)="otkazi_unos($event)">Откажи</button>
+     
+          <button type="button" class="btn btn-success" (click)="sacuvaj()" *ngIf="!pregledaj_posao">Сачувај</button>
+          <button type="button" class="btn btn-danger" (click)="odbij_zahtev()" *ngIf="pregledaj_posao">Одбиј</button>
+          <button type="button" class="btn btn-primary" (click)="prihvati_zahtev()" *ngIf="pregledaj_posao">Прихвати</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal modal-xl fade" id="pregledaj_zahtev" tabindex="-1" aria-labelledby="pregledaj_zahtev" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Прегледање захтева</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="otkazi_unos($event)"></button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-{{greska ? 'danger' : 'primary'}} d-flex align-items-center" role="alert" *ngIf="greska || uspeh">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <div>
+                {{greska ? greska : uspeh}} 
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-auto" style="overflow: auto;">
+                <canvas #skica_objekta class="" style=" background: white;" style="border: 1px solid black;" 
+                width="600" height="350"></canvas>
+              </div>
+              <div class="col" *ngIf="tekuci_objekat">
+                <strong>Тип: </strong> {{tekuci_objekat.tip}}<br/>
+                <strong>Адреса: </strong> {{tekuci_objekat.adresa}}<br/>
+                <strong>Квадратура: </strong> {{tekuci_objekat.kvadratura}}<br/>
+                <strong>Бр. просторија: </strong> {{tekuci_objekat.broj_prostorija}}
+                <hr>
+                <h6>Попунити у случају прихватања:</h6>
+                <div class="form-floating mb-4">
+                    <input type="text" class="form-control" name="ponuda" id="ponuda" placeholder="Унесите понуду" [(ngModel)]="ponuda" required>
+                    <label for="ponuda">Понуда (у динарима)</label>
+                </div>
+              </div>
+            </div>
+          
+          
+        
+         
+       
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #gasenje (click)="otkazi_unos($event)">Откажи</button>
+          <button type="button" class="btn btn-danger" (click)="odbij_zahtev()">Одбиј</button>
+          <button type="button" class="btn btn-primary" (click)="prihvati_zahtev()">Прихвати</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>

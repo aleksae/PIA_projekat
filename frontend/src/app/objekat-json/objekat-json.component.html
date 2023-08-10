@@ -1,0 +1,17 @@
+<h4>Додавање објекта путем JSON фајла</h4>
+
+<div class="container">
+    <div class="alert alert-danger" *ngIf="greska">
+        {{greska}}
+    </div>
+    <div class="alert alert-info" *ngIf="uspeh">
+        {{uspeh}}
+    </div>
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Постављање фајла</label>
+        <input class="form-control" type="file" id="formFile" (change)="promenjenFajl($event)">
+      </div>
+    <div class="">
+        <button class="btn btn-primary" (click)="sacuvaj()" [disabled]="!this.uspeh">Сачувај</button>
+    </div>
+</div>

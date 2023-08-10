@@ -1,0 +1,133 @@
+<main>
+    <h1 class="h3 fw-normal" >Регистрација клијената</h1>
+    <app-loader *ngIf="slanje_u_toku"></app-loader>
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+      </svg>
+      
+      <div class="alert alert-primary d-flex align-items-center" role="alert" *ngIf="poruka_o_stanju">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <div>
+          {{poruka_o_stanju}} Бићете преусмерени за: {{odbrojavanje}}
+        </div>
+      </div>
+    <div id="greske" class="rounded">
+    <ul>
+      <div class="text-danger" *ngIf="greska!=null">
+        <li>{{greska}}</li>
+      </div>
+    <div *ngIf="postoji_k_ime" class="text-danger">
+        <li>Корисничко име већ постоји</li>
+      </div>
+      <div *ngIf="postoji_mejl" class="text-danger">
+        <li>Постоји налог регистрован са унетом мејл адресом</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinka_7">
+        <li>Лозинка мора да има бар 7 карактера</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinka_12">
+        <li>Лозинка не може имати више од 12 карактера</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinka_vs">
+        <li>Лозинка мора да садржи бар једно велико слово</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinka_broj">
+        <li>Лозинка мора да садржи бар један број</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinka_sk">
+        <li>Лозинка мора да садржи бар један специјалан карактер</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinka_pocinje_slovom">
+        <li>Лозинка мора да почиње словом</li>
+      </div>
+      <div class="text-danger" *ngIf="!lozinke_iste">
+        <li>Лозинке се не поклапају</li>
+      </div>
+      <div class="text-danger" *ngIf="!format_mejl() && mejl">
+        <li>Мејл није у добром формату</li>
+      </div>
+      
+    
+    </ul> 
+    </div>
+    
+       
+          <div class="form-floating mb-4 ">
+            <input type="text" class="form-control"
+            name="k_ime" required id="floatingInput" placeholder="name@example.com"  [(ngModel)]="k_ime" (input)="check()">
+            <label for="floatingInput">Корисничко име</label>
+          </div>
+          
+          
+            <div class="row">
+                <div class="col">
+                <div class="form-floating mb-4">
+                    <input type="password" class="form-control" name="lozinka" id="lozinka" placeholder="Лозинка" [(ngModel)]="lozinka" (input)="check_pass()" (focus)="check_pass()" required>
+                    <label for="lozinka">Лозинка</label>
+                </div>
+                </div>
+                <div class="col">
+                <div class="form-floating mb-4">
+                    <input type="password" class="form-control " name="lozinka_opet" id="lozinka_opet" placeholder="Унесите лозинку поново" [(ngModel)]="lozinka_opet"  required (input)="check_pass_opet()">
+                    <label for="lozinka_opet">Лозинка провера</label>
+                </div>
+                </div>
+             
+           </div>
+           <div class="row">
+            <div class="col">
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" name="ime" id="ime" placeholder="Унесите име" [(ngModel)]="ime" required>
+                <label for="ime">Име</label>
+            </div>
+            </div>
+            <div class="col">
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control " name="prezime" id="prezime" placeholder="Презиме" [(ngModel)]="prezime"  required>
+                <label for="prezime">Презиме</label>
+            </div>
+            </div>
+         
+       </div>
+           <div class="row">
+            <div class="col">
+            <div class="form-floating mb-4">
+                <input type="number" class="form-control" name="br_tel" id="br_tel" placeholder="Унесите телефон" [(ngModel)]="telefon" required>
+                <label for="lozinka">Телефон</label>
+            </div>
+            </div>
+            <div class="col">
+            <div class="form-floating mb-4">
+                <input type="email" class="form-control " name="mejl" id="mejl" placeholder="Унесите мејл"  required [(ngModel)]="mejl" (input)="check()" >
+                <label for="mejl">Мејл адреса</label>
+            </div>
+            </div>
+         
+       </div>
+       <div class="row">
+        <div class="col-9">
+       <div class="mb-3">
+        <label for="formFile" class="form-label">Поставите профилну слику (опционо)</label>
+        <input class="form-control" type="file" id="formFile" name="prof_slika" accept="image/png, image/jpeg" (change)="fileChange($event)" src="{{uploadedFiles}}">
+      </div>
+      </div>
+      <div class="col">
+        <p *ngIf="imageSrc">Преглед постављене слике:</p>
+        <img [src]="imageSrc" *ngIf="imageSrc" >
+      </div>
+      </div>
+    
+      <div class="d-flex justify-content-between mb-3">
+        <span></span>
+        <button class="btn btn-primary" (click)="registracija()"  disabled="{{(!(!this.postoji_k_ime && !this.postoji_mejl) || !(this.lozinka_7 && this.lozinka_12 && this.lozinka_broj && this.lozinka_pocinje_slovom && this.lozinka_sk && this.lozinka_vs) || !(this.lozinke_iste) || !ime || !prezime || !telefon || !mejl ||!k_ime ||!lozinka || !lozinka_opet ||!format_mejl() || img_err) ? 'disabled':''}}">Регистрација</button>
+      </div>
+      
+      
+      
+      
+    </main>
+   
+    

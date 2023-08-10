@@ -1,0 +1,66 @@
+#jumbotron{
+    background-color: #546A7B;
+    max-height: 400px;
+
+}
+#agencija{
+    background-color: rgba(237, 254, 225, 0.2) !important;
+  
+
+}
+#klijent{
+    background-color: rgba(5, 56, 107, 0.2) !important;
+
+}
+
+#jambotron_slika{
+    margin-top: -8em;
+    margin-left: -3em;
+   width: 30em;
+}
+
+  
+
+@media only screen and (max-width: 400px) {
+    #prijava_ikona {
+      display: block;
+    }
+    #prijava_text {
+        display: none;
+      }
+    #full_screen{
+        display: none;
+    }
+    #small_screen{
+        display: block;
+    }
+    #jambotron_opis{
+        display:  none;
+    }
+}
+@media only screen and (max-width: 1399px) {
+    #jambotron_slika_kontejner{
+        display: none;
+    }
+    #jambotron_glavno_tekst{
+        margin-top: -2em;
+    }
+}
+@media only screen and (min-width: 401px) {
+    #prijava_text {
+      display: block;
+    }
+    #prijava_ikona {
+        display: none;
+      }
+      #full_screen{
+        display: block;
+    }
+    #small_screen{
+        display: none;
+    }
+}
+.btn-primary{
+    background-color: #DB5461;
+    border-color: #DB5461;
+}

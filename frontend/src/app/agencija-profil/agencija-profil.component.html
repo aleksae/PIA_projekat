@@ -1,0 +1,109 @@
+<div class="container">
+    <div class="row">
+        <div class="col rounded-3 text-white me-3" id="info">
+            <div class="mt-3">
+            <p><strong>Назив: </strong> <output value="{{ulogovan.dodatno.naziv}}"></output></p>
+            <p><strong>Адреса: </strong>  <output value="{{ulogovan.dodatno.adresa}}"></output></p>
+            <p><strong>Опис: </strong>  <output value="{{ulogovan.dodatno.opis}}"></output></p>
+            <p><strong>Матични број: </strong>  <output value="{{ulogovan.dodatno.maticni_broj}}"></output></p>
+            <p><strong>И-мејл адреса: </strong> <output value="{{ulogovan.imejl}}"></output></p>
+            <p><strong>Број телефона: </strong> <output value="{{ulogovan.br_telefona}}"></output></p>
+                <div ><strong>Профилна слика</strong><span *ngIf="ulogovan.profilna_slika==''"> (подразумевано)</span>:</div>
+                <div class="mb-2 w-auto position-relative">
+                  
+                  <img src="http://localhost:4000/prikaz_slike/{{ulogovan.profilna_slika!='' || ulogovan.profilna_slika  ? ulogovan.profilna_slika:'podrazumevano_agencija.png'}}" >
+                  <span *ngIf ="ulogovan.profilna_slika!=''"(click)="obrisi_sliku()"style="margin-top: -0.5em; color: #ff1b21" class=" position-absolute top-0 end-75"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                  </svg></span> 
+                </div>
+            </div>
+
+        </div>
+        <div class="col rounded-3 text-white" id="azuriraj">
+           
+            <div class="container mt-4 text-dark">
+                
+                <h5 class="text-white">Уредите своје податке</h5>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        
+                    <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </symbol>
+                  </svg>
+                  
+                  <div class="alert alert-primary d-flex align-items-center" role="alert" *ngIf="poruka_o_stanju">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                    <div>
+                      {{poruka_o_stanju}}
+                    </div>
+                  </div>
+                <div >
+                    <div class="alert alert-danger" *ngIf="greska!=null">
+                        {{greska}}
+                      </div>
+                      <div class="alert alert-danger" *ngIf="!format_mejl() && mejl">
+                        Мејл није у добром формату
+                      </div>
+                      <div class="alert alert-danger" *ngIf="postoji_mejl">
+                        Ова мејл адреса је регострована са другим налогом.
+                      </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                    <div class="form-floating mb-4">
+                        <input type="text" class="form-control" name="naziv" id="naziv" placeholder="Унесите име" [(ngModel)]="naziv" required>
+                        <label for="naziv">Назив</label>
+                    </div>
+                    </div>
+                    <div class="col">
+                    <div class="form-floating mb-4">
+                        <input type="text" class="form-control " name="adresa" id="adresa" placeholder="Презиме" [(ngModel)]="adresa"  required>
+                        <label for="adresa">Адреса</label>
+                    </div>
+                    </div>
+                 
+               </div>
+               <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="opis" class="form-label">Кратак опис агенције</label>
+                        <textarea class="form-control" id="opis" rows="3" [(ngModel)]="opis"></textarea>
+                      </div>
+                    </div>
+                    </div>
+                   <div class="row">
+                    <div class="col">
+                    <div class="form-floating mb-4">
+                        <input type="number" class="form-control" name="br_tel" id="br_tel" placeholder="Унесите телефон" [(ngModel)]="telefon" required>
+                        <label for="lozinka">Телефон</label>
+                    </div>
+                    </div>
+                    <div class="col">
+                    <div class="form-floating mb-4">
+                        <input type="email" class="form-control " name="mejl" id="mejl" placeholder="Унесите мејл"  required [(ngModel)]="mejl" (input)="check()" >
+                        <label for="mejl">Мејл адреса</label>
+                    </div>
+                    </div>
+                 
+               </div>
+               <div class="row mb-2">
+                <div class="col-9">
+               <div class="mb-3">
+                <label for="formFile" class="form-label text-white">Поставите профилну слику (оставите празно ако не желите да мењате)</label>
+                <input class="form-control" type="file" id="formFile" name="prof_slika" accept="image/png, image/jpeg" (change)="fileChange($event)" src="{{uploadedFiles}}">
+              </div>
+              </div>
+              <div class="col">
+                <p *ngIf="imageSrc" class="text-white">Преглед постављене слике:</p>
+                <img [src]="imageSrc" *ngIf="imageSrc" >
+              </div>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span></span>
+                <button class="btn btn-primary" (click)="azuriraj()"  disabled="{{((this.postoji_mejl)  || !naziv || !adresa || !opis || !telefon || !mejl ||!format_mejl() || img_err) ? 'disabled':''}}">Ажурирај</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+.form-control{
+    background-color: #EDF5E1;
+}
+#greske{
+    background-color: rgba(237,245,225, 0.8);
+}
+.btn-primary{
+    background-color: #05386B;
+    outline-color: #05386B;
+    border-color: #05386B;
+}

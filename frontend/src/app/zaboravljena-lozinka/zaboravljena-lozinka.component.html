@@ -1,0 +1,110 @@
+
+
+<main class="form-signin">
+
+    <div class="container" id="veliki_ekran">
+        <div class="row">
+            <div class="col-6">
+      <img class="mb-4" src="../../assets/images/prijava.svg" alt="" style="width: 75%">
+      </div>
+      <div class="col">
+      <h1 class="h3 fw-normal" style="margin-bottom: 2em;">Ресетовање лозинке</h1>
+        <div class="mb-4">
+            <span class="alert alert-danger" *ngIf="mejl_greska">Неисправан формат мејла</span>
+        </div>
+        <div class="mb-4">
+            <span class="alert alert-danger" *ngIf="!mejl_postoji">Не постоји налог са овим мејлом</span>
+        </div>
+        <div class="mb-4">
+            <span class="alert alert-danger" *ngIf="mejl_razlicit">Мејл адресе се не поклапају</span>
+        </div>
+        <div *ngIf="!poslato">
+      <div class="form-floating mb-4 ">
+        <input type="email" class="form-control" 
+        name="mejl" required id="floatingInput" placeholder="name@example.com" [(ngModel)]="mejl"  #name="ngModel" (input)="format_mejl()" (input)="postoji_mejl()" (mouseleave)="postoji_mejl()">
+        <label for="floatingInput">Унесите мејл</label>
+      </div>
+      <div class="form-floating mb-4 ">
+        <input type="email" class="form-control" 
+        name="mejl" required id="floatingInput" placeholder="name@example.com" [(ngModel)]="mejl_potvrda"  #name="ngModel" (input)="mejl_isti()">
+        <label for="floatingInput">Потврдиле мејл</label>
+      </div>
+      
+      
+  
+      <div class="text-danger mb-2">
+        {{poruka ? "Погрешно унети подаци" : ""}}
+      </div>
+      <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="posalji()" disabled="{{ (mejl_greska || mejl_razlicit || !mejl_postoji || !mejl || !mejl_potvrda) ? 'disabled' : ''}}">Пошаљи</button>
+    </div>
+    <div *ngIf="poslato">
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+      </svg>
+      <div class="alert alert-primary d-flex align-items-center" role="alert" >
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <div>
+          Мејл са линком за ресет лозинке је послат и важи наредних 10 минута.
+        </div>
+    </div>
+    </div>
+      
+    </div>
+    </div>
+    </div>
+    <div class="container" id="mali_ekran">
+        
+      <h1 class="h3 fw-normal" style="margin-bottom: 2em;">Ресетовање лозинке</h1>
+
+      <div class="mb-4">
+        <span class="alert alert-danger" *ngIf="mejl_greska">Неисправан формат мејла</span>
+    </div>
+    <div class="mb-4">
+        <span class="alert alert-danger" *ngIf="!mejl_postoji">Не постоји налог са овим мејлом</span>
+    </div>
+    <div class="mb-4">
+        <span class="alert alert-danger" *ngIf="mejl_razlicit">Мејл адресе се не поклапају</span>
+    </div>
+    <div *ngIf="!poslato">
+    <div class="form-floating mb-4 ">
+        <input type="email" class="form-control" 
+        name="mejl" required id="floatingInput" placeholder="name@example.com" [(ngModel)]="mejl"  #name="ngModel" (input)="format_mejl()" (input)="postoji_mejl()" (mouseleave)="postoji_mejl()">
+        <label for="floatingInput">Унесите мејл</label>
+      </div>
+      <div class="form-floating mb-4 ">
+        <input type="email" class="form-control" 
+        name="mejl" required id="floatingInput" placeholder="name@example.com" [(ngModel)]="mejl_potvrda"  #name="ngModel" (input)="mejl_isti()">
+        <label for="floatingInput">Потврдиле мејл</label>
+      </div>
+      
+      
+  
+      <div class="text-danger mb-2">
+        {{poruka ? "Погрешно унети подаци" : ""}}
+      </div>
+      <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="posalji()" disabled="{{ (mejl_greska || mejl_razlicit || !mejl_postoji || !mejl || !mejl_potvrda) ? 'disabled' : ''}}">Пошаљи</button>
+    </div>
+    <div *ngIf="poslato">
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+      </svg>
+      <div class="alert alert-primary d-flex align-items-center" role="alert" >
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <div>
+          Мејл са линком за ресет лозинке је послат и важи наредних 10 минута.
+        </div>
+    </div>
+    </div>
+     
+      
+    
+    </div>
+   
+  </main>
+

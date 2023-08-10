@@ -1,0 +1,22 @@
+<p>Добро дошли, администаторе</p>
+<h4>Захтеви за регистрацију</h4>
+<div class="table-responsive">
+    <table class="table table-light table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Корисничко име</th>
+                <th>Мејл</th>
+                <th>Тип</th>
+                <th>Акција</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let k of korisnici">
+                <td>{{k.korisnicko_ime}}</td>
+                <td>{{k.imejl}}</td>
+                <td>{{k.uloga}}</td>
+                <td><a class="link-info me-2 l" (click)="obradi(1, k)">Прихвати</a><a class="link-danger l" (click)="obradi(0,k)">Одбиј</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

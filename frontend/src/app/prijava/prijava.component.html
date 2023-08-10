@@ -1,0 +1,80 @@
+
+
+<main class="form-signin">
+
+    <div class="container" id="veliki_ekran">
+        <div class="row">
+            <div class="col-6">
+      <img class="mb-4" src="../../assets/images/prijava.svg" alt="" style="width: 75%">
+      </div>
+      <div class="col">
+      <h1 class="h3 fw-normal" style="margin-bottom: 2em;">Пријава на систем</h1>
+  
+      <div class="alert alert-danger mb-2" *ngIf="poruka">
+        {{poruka}}
+      </div>
+      <div class="form-floating mb-4 ">
+        <input type="text" class="form-control" 
+        name="k_ime" required id="floatingInput" placeholder="name@example.com" [(ngModel)]="k_ime"  #name="ngModel" >
+        <label for="floatingInput">Корисничко име</label>
+      </div>
+      
+      <div class="form-floating mb-4">
+        <input type="password" class="form-control "  id="floatingPassword" placeholder="Password" [(ngModel)]="lozinka" required>
+        <label for="floatingPassword">Лозинка</label>
+      </div>
+  
+      
+      <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="prijava()">Пријава</button>
+      
+      <hr class="mb-4 mt-4 text-white" />
+      <div class="container">
+        <div class="row">
+            <div class="col">
+                <a href="#" routerLink="/zaboravljena_lozinka" class="link-dark">Заборављена лозинка</a>
+            </div>
+            <div class="col">
+                Немате налог? Региструјте се као <a href="#" routerLink="registracija/klijent" class="link-dark">клијент</a> или <a href="#" routerLink="" class="link-dark">агенција</a>.
+            </div>
+            
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    <div class="container" id="mali_ekran">
+        
+      <h1 class="h3 fw-normal" style="margin-bottom: 2em;">Пријава на систем</h1>
+      <div class="alert alert-danger mb-2" *ngIf="poruka">
+        {{poruka}}
+      </div>
+      <div class="form-floating mb-4 ">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" [(ngModel)]="k_ime" required>
+        <label for="floatingInput">Корисничко име</label>
+      </div>
+      <div class="form-floating mb-4">
+        <input type="password" class="form-control "  id="floatingPassword" placeholder="Password" [(ngModel)]="lozinka" required>
+        <label for="floatingPassword">Лозинка</label>
+      </div>
+  
+      
+      <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="prijava()">Пријава</button>
+      
+      <hr class="mb-4 mt-4 text-white" />
+      <div class="container">
+        <div class="row">
+            <div class="col">
+                <a href="#" routerLink="" class="link-dark">Заборављена лозинка</a>
+            </div>
+            <div class="col">
+                Немате налог? Региструјте се као <a href="#" routerLink="" class="link-dark">клијент</a> или <a href="#" routerLink="" class="link-dark">агенција</a>.
+            </div>
+            
+        </div>
+      </div>
+      
+    
+    </div>
+   
+  </main>
+

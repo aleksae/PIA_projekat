@@ -1,0 +1,120 @@
+<div class="container" *ngIf="!aktivno_crtanje">
+  
+<div class="row">
+<h4>Унос основних података</h4>
+<div class="alert alert-danger" *ngIf="greska">
+  {{greska}}
+</div>
+<div class="col">
+  <select class="form-select" [(ngModel)]="tip">
+    <option selected>Тип објекта</option>
+    <option value="Кућа">Кућа</option>
+    <option value="Стан">Стан</option>
+  </select>
+</div>
+<div class="col-6">
+<input class="form-control" type="text" placeholder="Адреса" aria-label="Адреса" [(ngModel)]="adresa">
+</div>
+<div class="col">
+  <select class="form-select" [(ngModel)]="broj_prostorija" (change)="postaviProstorije()">
+    <option selected>Број просторија</option>
+    <option value="1">Једна</option>
+    <option value="2">Две</option>
+    <option value="3">Три</option>
+  </select>
+</div>
+<div class="col">
+  <input class="form-control" type="number" placeholder="Квадратура" aria-label="Квадратура" [(ngModel)]="kvadratura" min="1">
+  </div>
+</div>
+<div class="row">
+  
+  <!--<span class="text-start">Start aligned text on all viewport sizes.</span>-->
+  <span class="text-end text-primary " style="cursor: pointer;" (click)="azuriraj_prikaz_glavno(true)">Цртање скице <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
+  </svg></span>
+</div>
+</div>
+<div class="container {{aktivno_crtanje ? '' : 'd-none'}}" >
+    <div class="row">
+        <div class="col-sm">
+            <h5>Преглед просторија:</h5>
+            <div class="alert alert-danger" *ngIf="greska">
+                {{greska}}
+            </div>
+     
+            <div *ngFor="let p of prostorije; index as n;">
+                <div>
+                    <h6>Просторија {{n+1}} </h6> 
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="s_prostorija{{n}}">Ширина: </label>
+                            <input class="form-control w-auto {{izabran_za_postavljanje == n ? 'border-warning': ''}}" id="{{prostorije[n].postavljeno ? 'disabled':''}}s_prostorija{{n}}" [disabled] = "prostorije[n].postavljeno" type="number" [(ngModel)]="prostorije[n].sirina" >
+                        </div>
+                        <div class="col">
+                            <label for="v_prostorija{{n}}">Висина: </label>
+                            <input class="form-control w-auto {{izabran_za_postavljanje == n ? 'border-warning': ''}}" id="{{prostorije[n].postavljeno ? 'disabled':''}}v_prostorija{{n}}" [disabled] = "prostorije[n].postavljeno" type="number" [(ngModel)]="prostorije[n].visina">
+                        </div>
+                        <div class="col">
+                            <button class="btn badge {{izabran_za_postavljanje == n ? 'bg-warning': 'bg-info'}}" *ngIf="!prostorije[n].postavljeno" (click)="postavi_select(n)">{{this.izabran_za_postavljanje==n ? 'Откажи' : 'Постави'}}</button>
+                            <button class="btn badge bg-info" *ngIf="prostorije[n].postavljeno" (click)="ukloni(n)" >Уклони</button>
+                            <button class="btn badge {{selektovana_vrata ? (vrata[selektovana_vrata]['prostorija'] == n ? 'bg-warning': 'bg-info') : ('bg-info')}}" *ngIf="prostorije[n].postavljeno" (click)="dodaj_vrata(n)" >Додај <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-door-closed-fill" viewBox="0 0 16 16">
+                                <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                              </svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm"  >
+            <h4>Цртање скице <!-- Button trigger modal -->
+                <span  class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill text-primary" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                      </svg>
+                </span>
+                
+               </h4>
+            <canvas #skica_objekta class="" style=" background: white;" 
+              width="{{(prozor_s<429) ? 285 :((prozor_s<717) ? 400 : 600)}}" height="{{(prozor_s<429) ? 178 :((prozor_s<717) ? 250 : 350)}}" (contextmenu)="desniKlik($event)" (click)="postavi($event)" (mousedown)="postavi($event)" (mousemove)="postavi($event)"  (mouseout)="postavi($event)"(mouseup)="postavi($event)"></canvas>
+        </div>
+        
+    </div>
+    <div class="row">
+        <div class="col">
+      <span class=" text-primary" style="cursor: pointer;" (click)="azuriraj_prikaz_glavno(false)">Унос података <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
+      </svg></span>
+    </div>
+    
+</div>
+<div class="d-flex flex-row-reverse">
+  
+  <button type="button" class="btn btn-primary me-3" (click)="dodaj()" [disabled]="greska">Додај објекат</button>
+</div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Упутство</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <ul class="list-group">
+                <li class="list-group-item">Додавање просторије ради се уносом испранвих димензија (>0). Након тога, кликните на дугме додај. Када мишом пређете на површину за пројектовање видећете просторију и моћи ћете да ка поставите где желите. Кликом на ту просторију моћи ћете да је померате док год држите клик миша.</li>
+                <li class="list-group-item">Додавање врата ради се кликом на дугме додај врата. Затим на платну кликнете где желите да их додате и она ће се појавити. Можете их померати дуж постављеног зида слично као што се помера просторија. Врата се бришу тако што ставите миш преко њих и притиснете десни клик миша.</li>
+              </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+<script>
+
+</script>

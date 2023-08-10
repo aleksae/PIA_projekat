@@ -1,0 +1,80 @@
+<div *ngIf="obradjeno">
+<div *ngIf="greska" >
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path *ngIf="greska=='Токен је истекао!'" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+            <path *ngIf="greska!='Токен је истекао!'" d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </symbol>
+      </svg>
+      <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+            {{greska}}
+        </div>
+      </div>
+    
+</div>
+<div *ngIf="!greska">
+
+    <main class="form-signin">
+
+        <div class="container" id="veliki_ekran">
+            <div class="row">
+                <div class="col-6">
+          <img class="mb-4" src="../../assets/images/prijava.svg" alt="" style="width: 75%">
+          </div>
+          <div class="col">
+          <h1 class="h3 fw-normal" style="margin-bottom: 2em;">Унос нове лозинке</h1>
+            
+          <div class="mb-2">
+            <div class="alert alert-danger " role="alert"*ngIf="!lozinka_7">
+                <li>Лозинка мора да има бар 7 карактера</li>
+              </div>
+              <div class="alert alert-danger" *ngIf="!lozinka_12">
+                <li>Лозинка не може имати више од 12 карактера</li>
+              </div>
+              <div class="alert alert-danger" *ngIf="!lozinka_vs">
+                <li>Лозинка мора да садржи бар једно велико слово</li>
+              </div>
+              <div class="alert alert-danger" *ngIf="!lozinka_broj">
+                <li>Лозинка мора да садржи бар један број</li>
+              </div>
+              <div class="alert alert-danger" *ngIf="!lozinka_sk">
+                <li>Лозинка мора да садржи бар један специјалан карактер</li>
+              </div>
+              <div class="alert alert-danger" *ngIf="!lozinka_pocinje_slovom">
+                <li>Лозинка мора да почиње словом</li>
+              </div>
+              <div class="alert alert-danger" *ngIf="!lozinke_iste">
+                <li>Лозинке се не поклапају</li>
+              </div>
+          </div>
+          <div class="form-floating mb-4 ">
+            <input type="password" class="form-control" 
+            name="lozinka" required id="floatingInput" placeholder="name@example.com"    [(ngModel)]="lozinka" (input)="check_pass()" (focus)="check_pass()"  >
+            <label for="floatingInput">Унесите лозинку</label>
+          </div>
+          <div class="form-floating mb-4 ">
+            <input type="password" class="form-control" 
+            name="lozinka_opet" required id="floatingInput" placeholder="name@example.com"  [(ngModel)]="lozinka_opet"  required (input)="check_pass_opet()">
+            <label for="floatingInput">Потврдиле лозинку</label>
+          </div>
+          
+          
+      
+          <div class="text-danger mb-2">
+            
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="promeni_lozinku()">Постављање нове лозинке</button>
+   
+       
+          
+        </div>
+        </div>
+        </div>
+        </main>
+    </div>
+</div>
+<div *ngIf="!obradjeno">
+    Учитавање...
+</div>
